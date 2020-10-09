@@ -9,32 +9,38 @@ namespace VsProjectPoker21
         {
             Console.WriteLine("Hello World!");
         }
+
         public class Jeu
         {
+            //définit une carte, possèdant une valeur de point et un nom
             public class Carte
             {
                 static string name = "";
                 static int value;
             }
 
+            //classe représentant groupier, distribueur de carte. Possède le deck de jeu
             public class Banque
             {
                 public List<Carte> deck;
 
             }
             
+            //classe représentant le jeu de carte possedant chaque joueur.
             public class Mains
             {
                 public List<Carte> main;
                 public int valMain;
             }
 
+            //A pour but d'inititialiser le deck, en le remplissant d'un jeu de 52 (?) cartes habituelles
             public void Initialisation()
             {
-                string hauteur = "";
+                string hauteur ;
                 string couleur = "";
                 for (int i = 0; i < 4; i++)
                 {
+                    //on définit d'abord le signe de la carte, stockée dans la variable couleur
                     switch (i)
                     {
                         case 0:
@@ -50,9 +56,10 @@ namespace VsProjectPoker21
                             couleur = "trefle";
                             break;
                     }
-                    
+                    //on définie ensuite le type de carte du signe, allant de l'as au roi
                     for (int num = 1; num < 14; num++) // attention remettre en place pour l'as
                     {
+                        //si la carte est en dessous de valet, sa valeur correspond à sa hauteur
                         if (num < 11)
                         {
                             hauteur = num.ToString();
@@ -60,6 +67,7 @@ namespace VsProjectPoker21
                         }
                         else
                         {
+                            //dans le cas ou il s'agit d'une tête, on y assigne la valeur 10 et le nom de la tête en tant que hauteur
                             switch (num)
                             {
                                 case 11:
