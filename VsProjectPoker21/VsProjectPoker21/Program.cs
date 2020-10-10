@@ -9,7 +9,6 @@ namespace VsProjectPoker21
         {
             Console.WriteLine("Hello World!");
         }
-
         public class Jeu
         {
             //définit une carte, possèdant une valeur de point et un nom
@@ -17,6 +16,12 @@ namespace VsProjectPoker21
             {
                 static string name = "";
                 static int value;
+
+                public Carte(string cardName, int number)
+                {
+                    name = cardName;
+                    value = number;
+                }
             }
 
             //classe représentant groupier, distribueur de carte. Possède le deck de jeu
@@ -36,7 +41,9 @@ namespace VsProjectPoker21
             //A pour but d'inititialiser le deck, en le remplissant d'un jeu de 52 (?) cartes habituelles
             public void Initialisation()
             {
-                string hauteur ;
+                Banque banque = new Banque();
+
+                string hauteur = "";
                 string couleur = "";
                 for (int i = 0; i < 4; i++)
                 {
@@ -64,6 +71,7 @@ namespace VsProjectPoker21
                         {
                             hauteur = num.ToString();
                             //cree la carte avec valeur num et nom (hauteur + " de " + couleur)
+                            banque.deck.Add(new Carte(hauteur + " de " + couleur, num));
                         }
                         else
                         {
@@ -79,10 +87,14 @@ namespace VsProjectPoker21
                                 case 13:
                                     hauteur = "roi";
                                     break;
+                                default:
+                                    break;
                             }
-                            //cree la carte avec valeur dix et nom (hauteur + " de " + couleur) 
+                            //cree la carte avec valeur dix et nom (hauteur + " de " + couleur)
+                            
+                            banque.deck.Add(new Carte(hauteur + " de " + couleur, num));
                         }
-                        
+
                     }
                 }
             }
