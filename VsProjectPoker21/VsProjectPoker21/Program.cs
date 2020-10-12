@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VsProjectPoker21
 {
@@ -11,16 +12,30 @@ namespace VsProjectPoker21
         }
         public class Jeu
         {
+            public Banque banque = new Banque();
+
+            public Mains mainJoueur = new Mains();
+
+            public Mains mainBanque = new Mains();
+
+            public Random random = new Random();
+
+            //public Carte carte = new Carte();
+
             //définit une carte, possèdant une valeur de point et un nom
             public class Carte
             {
-                static string name = "";
-                static int value;
+                public string name = "";
+                public int value = 0;
 
                 public Carte(string cardName, int number)
                 {
                     name = cardName;
                     value = number;
+                }
+                public Carte()
+                {
+
                 }
             }
 
@@ -35,13 +50,13 @@ namespace VsProjectPoker21
             public class Mains
             {
                 public List<Carte> main;
-                public int valMain;
+                public int valMain = 0;
             }
 
             //A pour but d'inititialiser le deck, en le remplissant d'un jeu de 52 (?) cartes habituelles
             public void Initialisation()
             {
-                Banque banque = new Banque();
+                //Banque banque = new Banque();
 
                 string hauteur = "";
                 string couleur = "";
@@ -63,7 +78,7 @@ namespace VsProjectPoker21
                             couleur = "trefle";
                             break;
                     }
-                    //on définie ensuite le type de carte du signe, allant de l'as au roi
+                    //on définit ensuite le type de carte du signe, allant de l'as au roi
                     for (int num = 1; num < 14; num++) // attention remettre en place pour l'as
                     {
                         //si la carte est en dessous de valet, sa valeur correspond à sa hauteur
@@ -102,12 +117,19 @@ namespace VsProjectPoker21
             public void debutDePartie()
             {
                 //deux cartes sont piochées pour le joueur, et une pour la banque
+                pioche(mainJoueur);
+                pioche(mainJoueur);
+                pioche(mainBanque);
                 //mise à jour du total de point des mains ?
+
             }
 
             public void pioche(Mains mainADistribuer)
             {
                 //prend du deck une carte au hasard et la donne à la main
+                Carte objectToMove = banque.deck.ElementAt(random.Next(0, mainBanque.main.Count() - 1));
+                mainADistribuer.main.Add(objectToMove);
+                banque.deck.Remove(objectToMove);
                 //faire attention à si l'as est pioché
                 //mise à jour du total de point de la main ?
             }
@@ -122,6 +144,18 @@ namespace VsProjectPoker21
             public void jeuDeLaBanque()
             {
                 //distribution() de cartes jusqu'à ce que la valeur totale atteingne 16
+            }
+
+            //met à jour le nombre de point total des mains données
+            public void MAJPointsMains(Mains mainAMettreAJour)
+            {
+                for(int i = 0; i < mainAMettreAJour.main.Count() - 1; i++)
+                {
+                    Carte carteEnCours = mainAMettreAJour.main.ElementAt(i);
+                    
+                    mainAMettreAJour.valMain += carteEnCours.value;
+                    
+                }
             }
         }
         
