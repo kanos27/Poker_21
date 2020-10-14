@@ -20,6 +20,8 @@ namespace VsProjectPoker21
 
             public Random random = new Random();
 
+            public bool userContinue = false;
+
             //public Carte carte = new Carte();
 
             //définit une carte, possèdant une valeur de point et un nom
@@ -51,6 +53,7 @@ namespace VsProjectPoker21
             {
                 public List<Carte> main;
                 public int valMain = 0;
+                public bool over21 = false;
             }
 
             //A pour but d'inititialiser le deck, en le remplissant d'un jeu de 52 (?) cartes habituelles
@@ -139,23 +142,97 @@ namespace VsProjectPoker21
                 //récupération des cartes dans les mains
                 //remise à zéro du total de point de carte des mains
                 //ajout d'un score si mis en place
+                VideMain(mainBanque);
+                VideMain(mainJoueur);
+                mainBanque.valMain = 0;
+                mainBanque.over21 = false;
+                mainJoueur.valMain = 0;
+                mainJoueur.over21 = false;
+                
             }
 
-            public void jeuDeLaBanque()
+            public void VideMain(Mains mainAVider)
+            {
+                for (int i = 0; i < mainAVider.valMain;)
+                {
+                    //Carte objectToMove = banque.deck.ElementAt(random.Next(0, mainBanque.main.Count() - 1));
+                    banque.deck.Add(mainAVider.main.ElementAt(i));
+                    mainAVider.main.RemoveAt(i);
+                }
+            }
+
+            public void JeuDeLaBanque()
             {
                 //distribution() de cartes jusqu'à ce que la valeur totale atteingne 16
+                while (mainBanque.valMain < 16)
+                {
+                    pioche(mainBanque);
+                    MAJPointsMains(mainBanque);
+                }
             }
 
             //met à jour le nombre de point total des mains données
             public void MAJPointsMains(Mains mainAMettreAJour)
             {
+                mainAMettreAJour.valMain = 0;
+
                 for(int i = 0; i < mainAMettreAJour.main.Count() - 1; i++)
                 {
                     Carte carteEnCours = mainAMettreAJour.main.ElementAt(i);
                     
-                    mainAMettreAJour.valMain += carteEnCours.value;
+                    if (carteEnCours.value == 1)
+                    {
+                        if (mainAMettreAJour.valMain + 11 > 21)
+                        {
+                            mainAMettreAJour.valMain += 1;
+                        }
+                        else
+                        {
+                            mainAMettreAJour.valMain += 11;
+                        }
+                    }
+                    else
+                    {
+                        mainAMettreAJour.valMain += carteEnCours.value;
+                    }
                     
                 }
+                if (mainAMettreAJour.valMain > 21)
+                {
+                    mainAMettreAJour.over21 = true;
+                }
+
+            }
+
+            public void UserContinue()
+            {
+                //Demande à l'utilisateur s'il veut piocher une carte
+            }
+
+            public void DeroulementPartie()
+            {
+                debutDePartie();
+                MAJPointsMains(mainJoueur);
+                MAJPointsMains(mainBanque);
+                //si over21 = true, alors passer à finDePartie()
+
+                //Ne pas lancer le while si valMain >= 16
+
+                UserContinue();
+                while (userContinue)
+                {
+                    pioche(mainJoueur);
+                    MAJPointsMains(mainJoueur);
+                    //si over21 = true, alors passer à finDePartie
+
+                    UserContinue();
+                    //revoir UserContinue() pour y ajouter après différent choix (miser, séparer doubles, etc)
+                }
+                JeuDeLaBanque();
+                //si aucun a over21 = true, comparer les differents valMAin (méthode ?) 
+                //MAJ du score et dire qui a gagné
+                finDePartie();
+
             }
         }
         
