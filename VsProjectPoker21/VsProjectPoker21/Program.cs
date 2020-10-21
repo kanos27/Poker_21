@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace VsProjectPoker21
@@ -21,6 +22,8 @@ namespace VsProjectPoker21
             public Random random = new Random();
 
             public bool userContinue = false;
+
+            public bool userWin = false;
 
             //public Carte carte = new Carte();
 
@@ -119,6 +122,7 @@ namespace VsProjectPoker21
 
             public void debutDePartie()
             {
+                userWin = false;
                 //deux cartes sont piochées pour le joueur, et une pour la banque
                 pioche(mainJoueur);
                 pioche(mainJoueur);
@@ -214,7 +218,12 @@ namespace VsProjectPoker21
                 debutDePartie();
                 MAJPointsMains(mainJoueur);
                 MAJPointsMains(mainBanque);
+
                 //si over21 = true, alors passer à finDePartie()
+                if (mainJoueur.over21 == true)
+                {
+                    finDePartie();
+                }
 
                 //Ne pas lancer le while si valMain >= 16
 
